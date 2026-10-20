@@ -12,6 +12,7 @@ __pycache__/
 # Logs
 *.log
 
-# Distribution artifacts
+# Distribution artifacts & local tools
 dist/
 *.zip
+build_release_zip.sh
