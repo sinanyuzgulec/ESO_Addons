@@ -16,6 +16,7 @@ function ASGG.InitSettings()
         donation = function() ASGG.DonateGold(5000) end,
         registerForRefresh = true,
         registerForDefaults = true,
+        website = "https://www.esoui.com/downloads/info4970-ARC_SetGlowGuard-SetGlowampEquipmentTracker.html",
     }
 
     local optionsData = {

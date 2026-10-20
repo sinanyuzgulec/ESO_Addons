@@ -26,7 +26,7 @@ function ARC_CustomFonts:InitializeSettings()
         version = self.version,
         registerForRefresh = true,
         registerForDefaults = true,
-        website = "https://www.esoui.com",
+        website = "https://www.esoui.com/downloads/info4971-ARC_CustomFonts-High-QualityOpen-SourceFonts.html",
     }
 
     local hasLMP = (LibMediaProvider ~= nil)
