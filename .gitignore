@@ -1,0 +1,13 @@
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*~
+
+# Python cache (if any automation scripts are added)
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
