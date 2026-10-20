@@ -11,6 +11,7 @@ ASGG.author = "@arcsinan"
 
 -- Default settings
 ASGG.defaults = {
+    language = "en",
     enabled = true,
     autoShowCharacterOnInventory = true,
     highlightBackpack = true,
@@ -331,7 +332,8 @@ end
 function ASGG.DonateGold(amount)
     local world = (GetWorldName and GetWorldName()) or ""
     if world ~= "" and not string.find(string.lower(world), "eu") then
-        d("|cFF1744[ARC_SetGlowGuard]|r Dikkat: @arcsinan yalnizca |c00E676PC/EU Megaserver|r uzerindedir! (Bulundugunuz sunucu: " .. tostring(world) .. "). Gonderilecek postalar baska bir oyuncuya gidebilir veya teslim edilmeyebilir.")
+        local warnFmt = ASGG.GetString("CHAT_SERVER_WARNING")
+        d(string.format(warnFmt, tostring(world)))
     end
 
     local goldAmount = tonumber(amount) or 5000
@@ -345,7 +347,8 @@ function ASGG.DonateGold(amount)
             ZO_MailSendSubjectField:SetText("ARC_SetGlowGuard Donation")
         end
         if ZO_MailSendBodyField then
-            ZO_MailSendBodyField:SetText("Thank you @arcsinan for creating ARC_SetGlowGuard! Here is some gold to support your ESO addon development.")
+            local mailBody = ASGG.GetString("MAIL_BODY_DEFAULT")
+            ZO_MailSendBodyField:SetText(mailBody)
             ZO_MailSendBodyField:TakeFocus()
         end
         if goldAmount > 0 and QueueMoneyAttachment then
@@ -368,10 +371,18 @@ SLASH_COMMANDS["/sgg"] = function(args)
         end
     else
         ASGG.Refresh()
-        d("|c00D4FF[ARC_SetGlowGuard]|r Yenilendi! Algilanan set sayisi: " .. tostring(ASGG.numEquippedSets))
+        local refreshFmt = ASGG.GetString("CHAT_REFRESHED")
+        d(string.format(refreshFmt, tonumber(ASGG.numEquippedSets) or 0))
         for setKey, setData in pairs(ASGG.equippedSets) do
-            local status = setData.isIncomplete and "|cFF1744(Eksik: " .. setData.numEquipped .. "/" .. setData.maxEquipped .. ")|r" or "|c00E676(Tam: " .. setData.numEquipped .. "/" .. setData.maxEquipped .. ")|r"
-            d(string.format("  - %s %s", setData.name, status))
+            local statusStr
+            if setData.isIncomplete then
+                local incFmt = ASGG.GetString("CHAT_SET_INCOMPLETE")
+                statusStr = string.format(incFmt, setData.numEquipped, setData.maxEquipped)
+            else
+                local compFmt = ASGG.GetString("CHAT_SET_COMPLETE")
+                statusStr = string.format(compFmt, setData.numEquipped, setData.maxEquipped)
+            end
+            d(string.format("  - %s %s", setData.name, statusStr))
         end
     end
 end

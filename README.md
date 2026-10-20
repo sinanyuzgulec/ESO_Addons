@@ -1,64 +1,63 @@
 # ESO_Addons
 
-Bu depo, *The Elder Scrolls Online* (ESO) için geliştirilmiş özel arayüz, yaşam kalitesi (QoL) ve veri otomasyon araçlarını tek çatı altında toplayan monorepo projesidir.
-
-Geliştirici: **@arcsinan** ([GitHub](https://github.com/sinanyuzgulec))
+A collection of quality-of-life (QoL) user interface addons and companion automation utilities for *The Elder Scrolls Online* (ESO), developed and maintained by **@arcsinan** ([GitHub](https://github.com/sinanyuzgulec)).
 
 ---
 
-## 📦 Mevcut Araçlar & Eklentiler
+## 📦 Projects
 
 ### 1. [ARC_SetGlowGuard](./ARC_SetGlowGuard)
-* **Kategori**: Oyun İçi Arayüz (AddOn)
-* **Açıklama**: Giyili zırh, takı ve silah setlerini algılayarak aynı sete ait parçaları ortak canlı renklerle (Glow) parlatır. Yanlışlıkla set parçası çıkarılmasını, çantada kaybolmasını veya eksik parçayla gezilmesini önler.
-* **Görsel Önizleme**:
+* **Category**: In-Game UI Addon
+* **Compatibility**: Elder Scrolls Online (Update 44 / Gold Road ready, API `101050 101051`)
+* **Preview**:
   <p align="center">
-    <img src="./ARC_SetGlowGuard/screenshots/equipped_preview.png" alt="ARC_SetGlowGuard In-Game Equipment Preview" width="240" />
+    <img src="./ARC_SetGlowGuard/screenshots/equipped_preview.png" alt="ARC_SetGlowGuard In-Game Equipment Preview" width="280" />
   </p>
-* **Önemli Özellikler**:
-  - Giyili set parçalarını otomatik gruplandırıp renklendirme (Cyan, Amber, Mor, Zümrüt Yeşili vb.).
-  - `I` tuşuna basıldığında Envanter ile Karakter Ekipman panelini (`ZO_Character`) yan yana açma.
-  - Çantada duran eşleşen set parçalarını aynı renkte parlatma ve sol kenarına belirgin şerit ekleme.
-  - Eksik set parçası uyarısı (örn. `4/5`).
-  - LibAddonMenu-2.0 ayar paneli ve `@arcsinan` için oyun içi tek tıkla altın bağışlama sistemi.
+* **Key Features**:
+  - Automatically identifies all equipped armor, weapons, and jewelry sets.
+  - Highlights worn sets with coordinated vibrant glow colors (Cyan, Amber, Neon Purple, Emerald, Coral, Orange, and special Mythic glow).
+  - Automatically docks the Character equipment panel next to your backpack when pressing `I`.
+  - Highlights matching unequipped set pieces in your backpack with the same color and a vertical row accent bar, preventing accidental unequip or set breakage.
+  - Shows clear incomplete set alerts on gear slots (e.g., `4/5` or `1/2`).
+  - Full localization in **English** (default) and **Turkish** (`Türkçe`).
+  - Comprehensive in-game configuration menu via `LibAddonMenu-2.0`.
 
 ### 2. [ARC_TTC_PriceTable_python_workaround](./ARC_TTC_PriceTable_python_workaround)
-* **Kategori**: Harici Senkronizasyon & Otomasyon Aracı (CLI & Daemon)
-* **Açıklama**: Tamriel Trade Centre (TTC) fiyat tablolarını (`PriceTableEU.lua` / `PriceTableNA.lua`) otomatik olarak indiren ve güncelleyen hafif, sıfır bağımlılıklı Python aracı.
-* **Önemli Özellikler**:
-  - Özellikle Linux (Steam Deck, Proton, Lutris) ve macOS kullanıcıları için Windows `.NET Client.exe` bağımlılığını tamamen ortadan kaldırır.
-  - 12 saatte bir arka planda otomatik çalışan `systemd --user` servisi (Linux), Task Scheduler (Windows) ve `launchd` (macOS).
-  - Güvenli LUA veri çıkarma ve arşiv doğrulama.
-  - Geliştirici destek ve oyun içi altın bağış bilgilendirmesi (`--donate`).
+* **Category**: External Automation Companion Tool (CLI & Daemon)
+* **Target Platforms**: Linux (Steam Deck, Proton, Lutris), macOS, and Windows
+* **Key Features**:
+  - Automatically downloads and extracts official Tamriel Trade Centre (TTC) price table data (`PriceTableEU.lua` / `PriceTableNA.lua`).
+  - Completely eliminates the need for the official Windows `.NET Client.exe` on Linux and macOS.
+  - Zero third-party Python dependencies (built entirely on the Python 3 standard library).
+  - Background daemon support via `systemd --user` (Linux), `launchd` (macOS), or Windows Task Scheduler.
 
 ---
 
-## 🚀 Kurulum & Sembolik Bağlantılar (Symlink)
+## 📥 Installation
 
-### ARC_SetGlowGuard AddOn Kurulumu:
-Oyununuzun `AddOns` klasörüne sembolik bağlantı oluşturun:
-```bash
-ln -s "$HOME/Projeler/ESO_Addons/ARC_SetGlowGuard" "$HOME/Documents/Elder Scrolls Online/live/AddOns/ARC_SetGlowGuard"
-```
-Oyundayken sohbete `/reloadui` yazarak hemen kullanmaya başlayabilirsiniz.
+### ARC_SetGlowGuard (In-Game Addon)
+- **Via Minion**: Search for `ARC_SetGlowGuard` in Minion and click **Install**.
+- **Manual Installation**: Download the latest release `.zip` from GitHub and extract the `ARC_SetGlowGuard` folder into your game's `live/AddOns/` folder:
+  - **Windows**: `%USERPROFILE%\Documents\Elder Scrolls Online\live\AddOns\`
+  - **Linux / Steam Deck (Proton)**: `~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/Documents/Elder Scrolls Online/live/AddOns/`
+  - **macOS**: `~/Documents/Elder Scrolls Online/live/AddOns/`
 
-### ARC_TTC_PriceTable_Sync Kurulumu:
+### ARC_TTC_PriceTable_Sync (Automation Tool)
 ```bash
-cd "$HOME/Projeler/ESO_Addons/ARC_TTC_PriceTable_python_workaround"
-# Durumu kontrol et
+cd ARC_TTC_PriceTable_python_workaround
+
+# Check detection status
 python3 main.py --status
-# Hemen güncelle
+
+# Trigger an immediate price table update
 python3 main.py --sync
-# 12 saatte bir otomatik güncelleyen arka plan servisini kur
+
+# (Optional) Install automatic 12-hour background updater service on Linux
 ./setup_service.sh
 ```
 
 ---
 
-## 💛 Geliştirici Desteği & Bağış
+## 📄 License
 
-Eklenti ve araçları faydalı buluyorsanız geliştiriciye *The Elder Scrolls Online* içerisinde doğrudan altın bağışı gönderebilirsiniz:
-
-- **Oyun İçi Alıcı**: `@arcsinan` (Yalnızca **PC/EU Megaserver**)
-- **ARC_SetGlowGuard**: `Settings -> Addon Settings -> ARC_SetGlowGuard` menüsünden tek tıkla altın gönderme.
-- **TTC Sync**: `python3 main.py --donate`
+All projects in this repository are open source and licensed under the [MIT License](https://opensource.org/licenses/MIT).

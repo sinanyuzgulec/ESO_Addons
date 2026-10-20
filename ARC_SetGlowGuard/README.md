@@ -1,55 +1,73 @@
-# ARC_SetGlowGuard (ESO Addon)
+# ARC_SetGlowGuard
 
 <p align="center">
-  <img src="./screenshots/equipped_preview.png" alt="ARC_SetGlowGuard In-Game Preview" width="280" />
+  <img src="./screenshots/equipped_preview.png" alt="ARC_SetGlowGuard In-Game Equipment Preview" width="300" />
 </p>
 
-**ARC_SetGlowGuard**, *The Elder Scrolls Online* (ESO) oyuncularının set parçalarını yanlışlıkla çıkarmasını, çantasında kaybetmesini veya eksik setle gezmesini engellemek için geliştirilmiş hafif ve güçlü bir UI eklentisidir.
+<p align="center">
+  <strong>Smart Set Tracker & Visual Glow Coordinator for The Elder Scrolls Online</strong>
+</p>
 
 ---
 
-## 🌟 Özellikler
+## 🌟 Overview
 
-1. **Giyili Setleri Otomatik Eşleştirme ve Renklendirme (Glow)**:
-   - Üzerinizde bulunan zırh, takı ve silah setlerini algılar.
-   - Aynı sete ait olan tüm eşyaları aynı renkte (Cyan, Amber, Neon Mor, Zümrüt Yeşili vb.) canlı bir glow (parlama) efektiyle belirginleştirir.
-   - Mythic eşyalar kendine has özel bir renkle parlar.
-
-2. **'I' Tuşu Entegrasyonu (Envanter + Karakter Paneli)**:
-   - 'I' tuşuna bastığınızda varsayılan olarak sol tarafa Karakter Ekipman paneli (`ZO_Character`) eklenir ve çantanızla yan yana açılır.
-   - Böylece hem giydiğiniz set parçalarını hem de çantanızdaki eşyaları aynı anda, tek bakışta görebilirsiniz.
-   - İstenirse bu özellik ayarlar menüsünden kapatılabilir.
-
-3. **Çantadaki Eşleşen Set Parçalarının Parlaması**:
-   - Yanlışlıkla setinizden bir parça çıkarıp çantanıza attığınızda, o eşya çantanızda giyili olan setinizin rengiyle parlar ve sol kenarında renkli şerit belirir.
-   - Çantayı açar açmaz "Bu benim çıkardığım set parçam!" diyerek hemen fark edebilirsiniz.
-
-4. **Eksik Set Uyarısı (Incomplete Alert)**:
-   - Örneğin 5 parçalık bir setin sadece 4 parçasını taktıysanız veya yanlışlıkla bir parçasını çıkardıysanız, slotun üzerinde belirgin bir uyarı (örn. `4/5` veya `1/2`) görünür.
-
-5. **Gelişmiş Ayarlar Menüsü (LibAddonMenu-2.0)**:
-   - Eklentiyi açıp/kapatma.
-   - Parlaklık şiddeti (Glow Intensity) ve parlama dokusu seçimi (Action Bar Glow, Soft Magic, Pulse).
-   - Her set için özel renk seçici (Colorpicker).
-
-6. **@arcsinan İçin Gold Donate Sistemi**:
-   - Ayarlar panelinde yer alan tek tıkla altın bağışlama butonları (`5,000`, `25,000`, `100,000` Gold veya Özel Tutar).
-   - Tıklandığında oyun içi posta ekranını (`mailSend`) otomatik açar, alıcıyı `@arcsinan` (**yalnızca PC/EU Megaserver**), konuyu `ARC_SetGlowGuard Donation` olarak doldurur ve altını ekler.
+**ARC_SetGlowGuard** is a lightweight, high-performance UI addon for *The Elder Scrolls Online* designed to eliminate accidental set breakage, lost items, and missing 5-piece bonuses. It automatically detects all equipped armor, weapons, and jewelry sets, assigning distinct, vibrant glow colors to each set and keeping your backpack inventory synchronized in real time.
 
 ---
 
-## 📁 Kurulum
+## ✨ Features
 
-Eklenti `/home/arcsinan/Projeler/ESO_Addons/ARC_SetGlowGuard` dizininde yer almakta olup ESO AddOns klasörüne (`Documents/Elder Scrolls Online/live/AddOns/ARC_SetGlowGuard`) sembolik bağlantı (symlink) ile bağlanmıştır.
+- **Coordinated Set Glow**:
+  All pieces belonging to the same worn set glow with a shared vibrant color (Cyan, Amber, Neon Purple, Emerald Green, Coral Crimson, Vivid Orange). Equipped Mythic items are highlighted with a distinct mythic glow.
 
-Oyundayken eklentiyi yüklemek için sohbet satırına:
-```text
-/reloadui
-```
-yazmanız yeterlidir.
+- **Inventory Synchronization ('I')**:
+  When opening your inventory with `I`, the Character equipment sheet is automatically attached on the left side of your screen. All matching set pieces in your backpack glow with the identical color and feature a colored vertical stripe on the left edge of the inventory row.
+
+- **Incomplete Set Alert**:
+  If a set bonus is incomplete (for example, `4/5` or `1/2`), a clear numerical alert is rendered on the item slot so you immediately spot unequipped or mismatched gear.
+
+- **Multi-Language Support**:
+  Full localization in **English** (default) and **Turkish** (`Türkçe`). Switch languages anytime via the settings menu.
+
+- **Deep Customization (LibAddonMenu-2.0)**:
+  - Toggle glowing highlights for equipment slots and backpack items individually.
+  - Select from multiple glow texture styles (*Action Bar Glow*, *Magical Soft Highlight*, *Item Pulse*).
+  - Adjust glow intensity slider.
+  - Fully customizable colorpickers for every set slot, mythic items, and alert colors.
+
+- **Slash Commands**:
+  - `/sgg` or `/setglow`: Instantly refresh item glows and output active set diagnostics to chat.
+  - `/sgg settings` or `/sgg menu`: Open the LibAddonMenu settings panel.
 
 ---
 
-## ⚙️ Gereksinimler
+## 📥 Installation
 
-- **LibAddonMenu-2.0** (Ayarlar paneli için - sisteminizde halihazırda kuruludur).
+### Method 1: Via Minion (Recommended)
+1. Open **Minion**.
+2. Select **The Elder Scrolls Online**.
+3. Search for `ARC_SetGlowGuard`.
+4. Click **Install**.
+
+### Method 2: Manual Installation
+1. Download the latest `ARC_SetGlowGuard.zip` release.
+2. Extract the archive into your ESO AddOns directory:
+   - **Windows**: `%USERPROFILE%\Documents\Elder Scrolls Online\live\AddOns\`
+   - **Linux / Steam Deck (Proton)**: `~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/Documents/Elder Scrolls Online/live/AddOns/`
+   - **macOS**: `~/Documents/Elder Scrolls Online/live/AddOns/`
+3. Ensure the folder is named `ARC_SetGlowGuard` inside `AddOns`.
+4. In-game, enable the addon under `ESC -> Add-Ons` (or type `/reloadui` in chat).
+
+---
+
+## ⚙️ Dependencies
+
+- **[LibAddonMenu-2.0](https://www.esoui.com/downloads/info7-LibAddonMenu.html)** (Required for the settings menu).
+
+---
+
+## 📄 License
+
+Author: **@arcsinan** ([GitHub](https://github.com/sinanyuzgulec))  
+Released under the [MIT License](https://opensource.org/licenses/MIT).

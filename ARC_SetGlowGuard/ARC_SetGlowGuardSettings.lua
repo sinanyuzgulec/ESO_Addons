@@ -1,4 +1,4 @@
--- ARC_SetGlowGuardSettings.lua - LibAddonMenu-2.0 Settings Panel & Gold Donation for @arcsinan
+-- ARC_SetGlowGuardSettings.lua - LibAddonMenu-2.0 Settings Panel with Multi-Language Support
 -- Author: @arcsinan
 
 ARC_SetGlowGuard = ARC_SetGlowGuard or {}
@@ -21,16 +21,32 @@ function ASGG.InitSettings()
 
     local optionsData = {
         ------------------------------------------------------------------------
-        -- General Settings
+        -- General Settings & Language
         ------------------------------------------------------------------------
         {
             type = "header",
-            name = "|c00D4FFGeneral Settings|r",
+            name = function() return ASGG.GetString("HDR_GENERAL") end,
+        },
+        {
+            type = "dropdown",
+            name = function() return ASGG.GetString("OPT_LANGUAGE") end,
+            tooltip = function() return ASGG.GetString("OPT_LANGUAGE_TT") end,
+            choices = { "English", "Türkçe" },
+            choicesValues = { "en", "tr" },
+            getFunc = function() return (ASGG.vars and ASGG.vars.language) or "en" end,
+            setFunc = function(value)
+                ASGG.vars.language = value
+                if LAM.util and LAM.util.RequestRefreshIfNeeded then
+                    LAM.util.RequestRefreshIfNeeded(ASGG.settingsPanel)
+                end
+            end,
+            width = "full",
+            default = "en",
         },
         {
             type = "checkbox",
-            name = "Enable ARC_SetGlowGuard",
-            tooltip = "Toggles glowing set highlights on equipment and inventory.",
+            name = function() return ASGG.GetString("OPT_ENABLE") end,
+            tooltip = function() return ASGG.GetString("OPT_ENABLE_TT") end,
             getFunc = function() return ASGG.vars.enabled end,
             setFunc = function(value)
                 ASGG.vars.enabled = value
@@ -41,8 +57,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = "Show Character Sheet with Inventory ('I')",
-            tooltip = "When pressing 'I' to open your bag, automatically attaches the Character equipment panel to the left side of your screen. All worn sets and matching backpack items glow in matching colors simultaneously!",
+            name = function() return ASGG.GetString("OPT_AUTO_CHAR") end,
+            tooltip = function() return ASGG.GetString("OPT_AUTO_CHAR_TT") end,
             getFunc = function() return ASGG.vars.autoShowCharacterOnInventory end,
             setFunc = function(value)
                 ASGG.vars.autoShowCharacterOnInventory = value
@@ -53,8 +69,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = "Highlight Equipment Slots",
-            tooltip = "Equipped items belonging to the same set will glow with identical colors on your Character sheet.",
+            name = function() return ASGG.GetString("OPT_HIGHLIGHT_EQUIP") end,
+            tooltip = function() return ASGG.GetString("OPT_HIGHLIGHT_EQUIP_TT") end,
             getFunc = function() return ASGG.vars.highlightEquipment end,
             setFunc = function(value)
                 ASGG.vars.highlightEquipment = value
@@ -65,8 +81,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = "Highlight Backpack Items",
-            tooltip = "Items in your bag that match your currently equipped sets glow with the exact same set color, making accidentally unequipped items instantly noticeable.",
+            name = function() return ASGG.GetString("OPT_HIGHLIGHT_BAG") end,
+            tooltip = function() return ASGG.GetString("OPT_HIGHLIGHT_BAG_TT") end,
             getFunc = function() return ASGG.vars.highlightBackpack end,
             setFunc = function(value)
                 ASGG.vars.highlightBackpack = value
@@ -77,8 +93,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = "Show Left Accent Bar in Inventory Rows",
-            tooltip = "Draws a sleek colored vertical accent stripe on the left border of inventory rows matching equipped sets.",
+            name = function() return ASGG.GetString("OPT_ROW_BAR") end,
+            tooltip = function() return ASGG.GetString("OPT_ROW_BAR_TT") end,
             getFunc = function() return ASGG.vars.showRowBar end,
             setFunc = function(value)
                 ASGG.vars.showRowBar = value
@@ -89,8 +105,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = "Show Incomplete Set Alert (e.g. 4/5)",
-            tooltip = "Displays a clear piece count indicator on slots when an equipped set is missing pieces (e.g. 4/5 or 1/2) so you never miss an unequipped item.",
+            name = function() return ASGG.GetString("OPT_INCOMPLETE_ALERT") end,
+            tooltip = function() return ASGG.GetString("OPT_INCOMPLETE_ALERT_TT") end,
             getFunc = function() return ASGG.vars.showIncompleteWarning end,
             setFunc = function(value)
                 ASGG.vars.showIncompleteWarning = value
@@ -101,8 +117,8 @@ function ASGG.InitSettings()
         },
         {
             type = "slider",
-            name = "Glow Intensity",
-            tooltip = "Adjust how bright and vivid the glow highlights appear.",
+            name = function() return ASGG.GetString("OPT_GLOW_INTENSITY") end,
+            tooltip = function() return ASGG.GetString("OPT_GLOW_INTENSITY_TT") end,
             min = 0.2,
             max = 1.0,
             step = 0.05,
@@ -117,8 +133,8 @@ function ASGG.InitSettings()
         },
         {
             type = "dropdown",
-            name = "Glow Style",
-            tooltip = "Choose the visual texture used for glowing highlights.",
+            name = function() return ASGG.GetString("OPT_GLOW_STYLE") end,
+            tooltip = function() return ASGG.GetString("OPT_GLOW_STYLE_TT") end,
             choices = { "Action Bar Glow", "Magical Soft Highlight", "Item Pulse" },
             choicesValues = {
                 "EsoUI/Art/ActionBar/actionBar_mouseOver.dds",
@@ -139,12 +155,17 @@ function ASGG.InitSettings()
         ------------------------------------------------------------------------
         {
             type = "header",
-            name = "|c00D4FFSet Colors & Palette|r",
+            name = function() return ASGG.GetString("HDR_CUSTOM_COLORS") end,
+        },
+        {
+            type = "description",
+            text = function() return ASGG.GetString("DESC_CUSTOM_COLORS") end,
+            width = "full",
         },
         {
             type = "colorpicker",
-            name = "Set 1 Glow Color",
-            tooltip = "Glow color for the primary equipped set.",
+            name = function() return ASGG.GetString("COLOR_SET_1") end,
+            tooltip = function() return ASGG.GetString("COLOR_SET_1") end,
             getFunc = function()
                 local c = ASGG.vars.colors[1]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -158,8 +179,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = "Set 2 Glow Color",
-            tooltip = "Glow color for the secondary equipped set.",
+            name = function() return ASGG.GetString("COLOR_SET_2") end,
+            tooltip = function() return ASGG.GetString("COLOR_SET_2") end,
             getFunc = function()
                 local c = ASGG.vars.colors[2]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -173,8 +194,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = "Set 3 / Monster Set Glow Color",
-            tooltip = "Glow color for the 3rd set (e.g. 2-piece Monster Set).",
+            name = function() return ASGG.GetString("COLOR_SET_3") end,
+            tooltip = function() return ASGG.GetString("COLOR_SET_3") end,
             getFunc = function()
                 local c = ASGG.vars.colors[3]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -188,8 +209,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = "Set 4 Glow Color",
-            tooltip = "Glow color for 4th equipped set (e.g. Arena weapons).",
+            name = function() return ASGG.GetString("COLOR_SET_4") end,
+            tooltip = function() return ASGG.GetString("COLOR_SET_4") end,
             getFunc = function()
                 local c = ASGG.vars.colors[4]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -203,8 +224,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = "Mythic Item Glow Color",
-            tooltip = "Glow color for equipped Mythic items.",
+            name = function() return ASGG.GetString("COLOR_MYTHIC") end,
+            tooltip = function() return ASGG.GetString("COLOR_MYTHIC") end,
             getFunc = function()
                 local c = ASGG.vars.colors.mythic
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -218,8 +239,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = "Incomplete Set Alert Color",
-            tooltip = "Color used for incomplete set warning labels (e.g. 4/5).",
+            name = function() return ASGG.GetString("COLOR_WARNING") end,
+            tooltip = function() return ASGG.GetString("COLOR_WARNING") end,
             getFunc = function()
                 local c = ASGG.vars.colors.warning
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -233,13 +254,13 @@ function ASGG.InitSettings()
         },
         {
             type = "button",
-            name = "Reset Colors to Default",
-            tooltip = "Resets all glow colors back to standard high-contrast palette.",
+            name = function() return ASGG.GetString("BTN_RESET_COLORS") end,
+            tooltip = function() return ASGG.GetString("BTN_RESET_COLORS_TT") end,
             func = function()
                 ASGG.vars.colors = ZO_DeepTableCopy(ASGG.defaults.colors)
                 ASGG.Refresh()
             end,
-            width = "half",
+            width = "full",
         },
 
         ------------------------------------------------------------------------
@@ -247,38 +268,38 @@ function ASGG.InitSettings()
         ------------------------------------------------------------------------
         {
             type = "header",
-            name = "|cFFD700Support Developer (@arcsinan)|r",
+            name = function() return ASGG.GetString("HDR_DONATE") end,
         },
         {
             type = "description",
-            text = "Enjoying |c00D4FFARC_SetGlowGuard|r? No more accidentally lost set pieces or broken 5-piece bonuses!\nIf you would like to support ongoing development, you can send an in-game gold donation directly to |c00E676@arcsinan|r (|cFFD700PC/EU Megaserver only|r).",
+            text = function() return ASGG.GetString("DESC_DONATE") end,
             width = "full",
         },
         {
             type = "button",
-            name = "|cFFD700Send 5,000 Gold to @arcsinan|r",
-            tooltip = "Opens in-game mail addressed to @arcsinan with 5,000 gold pre-attached.",
+            name = function() return ASGG.GetString("BTN_DONATE_5K") end,
+            tooltip = function() return ASGG.GetString("BTN_DONATE_5K_TT") end,
             func = function() ASGG.DonateGold(5000) end,
             width = "half",
         },
         {
             type = "button",
-            name = "|cFFD700Send 25,000 Gold to @arcsinan|r",
-            tooltip = "Opens in-game mail addressed to @arcsinan with 25,000 gold pre-attached.",
+            name = function() return ASGG.GetString("BTN_DONATE_25K") end,
+            tooltip = function() return ASGG.GetString("BTN_DONATE_25K_TT") end,
             func = function() ASGG.DonateGold(25000) end,
             width = "half",
         },
         {
             type = "button",
-            name = "|cFFD700Send 100,000 Gold to @arcsinan|r",
-            tooltip = "Opens in-game mail addressed to @arcsinan with 100,000 gold pre-attached.",
+            name = function() return ASGG.GetString("BTN_DONATE_100K") end,
+            tooltip = function() return ASGG.GetString("BTN_DONATE_100K_TT") end,
             func = function() ASGG.DonateGold(100000) end,
             width = "half",
         },
         {
             type = "button",
-            name = "Open Mail to @arcsinan (Custom Amount)",
-            tooltip = "Opens in-game mail addressed to @arcsinan so you can enter any gold amount you wish.",
+            name = function() return ASGG.GetString("BTN_DONATE_CUSTOM") end,
+            tooltip = function() return ASGG.GetString("BTN_DONATE_CUSTOM_TT") end,
             func = function() ASGG.DonateGold(0) end,
             width = "half",
         },

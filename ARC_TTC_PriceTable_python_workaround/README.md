@@ -198,19 +198,6 @@ We extend our deep gratitude, highest respect, and credit to the creators, devel
 - **TTC WebClient & Service Disclaimer:** *This repository and its maintainers are strictly NOT responsible for any issues, outages, data discrepancies, account-related actions, or errors that may occur on or in connection with the Tamriel Trade Centre WebClient ([https://eu.tamrieltradecentre.com/pc/Trade/WebClient](https://eu.tamrieltradecentre.com/pc/Trade/WebClient)) or official TTC services. This tool only downloads publicly available price table zip archives and extracts local `.lua` tables.*
 ---
 
-## 💛 Support the Developer (@arcsinan)
-
-If you find this automated TTC updater helpful and it saves you time from running manual `.NET` tools on Linux/Windows/Mac, you can support the developer directly with an in-game gold donation in *The Elder Scrolls Online*!
-
-- **In-Game Recipient**: `@arcsinan` (**PC/EU Megaserver only**)
-- **Subject**: `TTC Sync Donation`
-- **CLI Command**: Run `python3 main.py --donate` anytime to view donation details.
-- **GitHub**: [github.com/sinanyuzgulec/ESO_Addons](https://github.com/sinanyuzgulec/ESO_Addons)
-
-Your support helps maintain and improve open-source ESO community tools. Thank you!
-
----
-
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE) - free and open source for everyone.
