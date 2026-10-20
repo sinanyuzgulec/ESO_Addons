@@ -99,7 +99,7 @@ def show_donation_info():
     cprint("│  You can support ongoing development with an in-game gold    │", Colors.YELLOW)
     cprint("│  donation in The Elder Scrolls Online:                       │", Colors.YELLOW)
     cprint("│                                                              │", Colors.YELLOW)
-    cprint("│  • In-Game Recipient : @arcsinan (EU & NA Megaservers)       │", Colors.YELLOW, bold=True)
+    cprint("│  • In-Game Recipient : @arcsinan (PC/EU Megaserver)          │", Colors.YELLOW, bold=True)
     cprint("│  • Mail Subject      : TTC Sync Donation                     │", Colors.YELLOW)
     cprint("│  • GitHub            : https://github.com/sinanyuzgulec      │", Colors.YELLOW)
     cprint("│                                                              │", Colors.YELLOW)
@@ -165,7 +165,7 @@ def show_status(config: Config):
 
     cprint("\n[ Developer Support & Donation ]", Colors.BOLD)
     print("  • Developer          : @arcsinan (Sinan Yüzgüleç)")
-    print("  • ESO In-Game Gold   : Send in-game mail to @arcsinan (EU & NA)")
+    print("  • ESO In-Game Gold   : Send in-game mail to @arcsinan (PC/EU Megaserver)")
     print("  • GitHub Repo        : https://github.com/sinanyuzgulec/ESO_Addons")
     print()
 

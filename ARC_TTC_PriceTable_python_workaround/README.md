@@ -202,7 +202,7 @@ We extend our deep gratitude, highest respect, and credit to the creators, devel
 
 If you find this automated TTC updater helpful and it saves you time from running manual `.NET` tools on Linux/Windows/Mac, you can support the developer directly with an in-game gold donation in *The Elder Scrolls Online*!
 
-- **In-Game Recipient**: `@arcsinan` (EU & NA Megaservers)
+- **In-Game Recipient**: `@arcsinan` (**PC/EU Megaserver only**)
 - **Subject**: `TTC Sync Donation`
 - **CLI Command**: Run `python3 main.py --donate` anytime to view donation details.
 - **GitHub**: [github.com/sinanyuzgulec/ESO_Addons](https://github.com/sinanyuzgulec/ESO_Addons)

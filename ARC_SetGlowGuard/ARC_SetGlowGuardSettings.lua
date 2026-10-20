@@ -251,7 +251,7 @@ function ASGG.InitSettings()
         },
         {
             type = "description",
-            text = "Enjoying |c00D4FFARC_SetGlowGuard|r? No more accidentally lost set pieces or broken 5-piece bonuses!\nIf you would like to support ongoing development, you can send an in-game gold donation directly to |c00E676@arcsinan|r.",
+            text = "Enjoying |c00D4FFARC_SetGlowGuard|r? No more accidentally lost set pieces or broken 5-piece bonuses!\nIf you would like to support ongoing development, you can send an in-game gold donation directly to |c00E676@arcsinan|r (|cFFD700PC/EU Megaserver only|r).",
             width = "full",
         },
         {

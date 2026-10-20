@@ -329,6 +329,11 @@ end
 --------------------------------------------------------------------------------
 
 function ASGG.DonateGold(amount)
+    local world = (GetWorldName and GetWorldName()) or ""
+    if world ~= "" and not string.find(string.lower(world), "eu") then
+        d("|cFF1744[ARC_SetGlowGuard]|r Dikkat: @arcsinan yalnizca |c00E676PC/EU Megaserver|r uzerindedir! (Bulundugunuz sunucu: " .. tostring(world) .. "). Gonderilecek postalar baska bir oyuncuya gidebilir veya teslim edilmeyebilir.")
+    end
+
     local goldAmount = tonumber(amount) or 5000
 
     SCENE_MANAGER:Show("mailSend")

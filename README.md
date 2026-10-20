@@ -59,6 +59,6 @@ python3 main.py --sync
 
 Eklenti ve araçları faydalı buluyorsanız geliştiriciye *The Elder Scrolls Online* içerisinde doğrudan altın bağışı gönderebilirsiniz:
 
-- **Oyun İçi Alıcı**: `@arcsinan` (EU & NA Megaserver)
+- **Oyun İçi Alıcı**: `@arcsinan` (Yalnızca **PC/EU Megaserver**)
 - **ARC_SetGlowGuard**: `Settings -> Addon Settings -> ARC_SetGlowGuard` menüsünden tek tıkla altın gönderme.
 - **TTC Sync**: `python3 main.py --donate`

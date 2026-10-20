@@ -34,13 +34,13 @@
 
 6. **@arcsinan İçin Gold Donate Sistemi**:
    - Ayarlar panelinde yer alan tek tıkla altın bağışlama butonları (`5,000`, `25,000`, `100,000` Gold veya Özel Tutar).
-   - Tıklandığında oyun içi posta ekranını (`mailSend`) otomatik açar, alıcıyı `@arcsinan`, konuyu `ARC_SetGlowGuard Donation` olarak doldurur ve altını ekler.
+   - Tıklandığında oyun içi posta ekranını (`mailSend`) otomatik açar, alıcıyı `@arcsinan` (**yalnızca PC/EU Megaserver**), konuyu `ARC_SetGlowGuard Donation` olarak doldurur ve altını ekler.
 
 ---
 
 ## 📁 Kurulum
 
-Eklenti `/home/arcsinan/Projeler/eso_set_mark` dizininde oluşturulmuş ve ESO AddOns klasörüne (`Documents/Elder Scrolls Online/live/AddOns/ARC_SetGlowGuard`) sembolik bağlantı (symlink) ile bağlanmıştır.
+Eklenti `/home/arcsinan/Projeler/ESO_Addons/ARC_SetGlowGuard` dizininde yer almakta olup ESO AddOns klasörüne (`Documents/Elder Scrolls Online/live/AddOns/ARC_SetGlowGuard`) sembolik bağlantı (symlink) ile bağlanmıştır.
 
 Oyundayken eklentiyi yüklemek için sohbet satırına:
 ```text
