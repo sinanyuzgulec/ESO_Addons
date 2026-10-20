@@ -31,13 +31,22 @@ A collection of quality-of-life (QoL) user interface addons and companion automa
   - Zero third-party Python dependencies (built entirely on the Python 3 standard library).
   - Background daemon support via `systemd --user` (Linux), `launchd` (macOS), or Windows Task Scheduler.
 
+### 3. [ARC_TurkishLanguageSupport](./ARC_TurkishLanguageSupport)
+* **Category**: In-Game Localization & Font Addon
+* **Compatibility**: Elder Scrolls Online (Update 44 / Gold Road ready, API `101050 101051`)
+* **Key Features**:
+  - Complete Unicode TrueType font replacement ensuring clean rendering of Turkish diacritics (`ç, ğ, ı, İ, ö, ş, ü`).
+  - Modular architecture: UI & Menus, Skills & Abilities, Items & Traits, Quests & Journal, Dialogues & Interactions.
+  - Granular toggle controls for every module via `LibAddonMenu-2.0`.
+  - Slash command diagnostics (`/tls` or `/turkce`).
+
 ---
 
 ## 📥 Installation
 
-### ARC_SetGlowGuard (In-Game Addon)
-- **Via Minion**: Search for `ARC_SetGlowGuard` in Minion and click **Install**.
-- **Manual Installation**: Download the latest release `.zip` from GitHub and extract the `ARC_SetGlowGuard` folder into your game's `live/AddOns/` folder:
+### In-Game Addons (ARC_SetGlowGuard & ARC_TurkishLanguageSupport)
+- **Via Minion**: Search for either addon name in Minion and click **Install**.
+- **Manual Installation**: Download the release `.zip` archive and extract the addon folder into your game's `live/AddOns/` directory:
   - **Windows**: `%USERPROFILE%\Documents\Elder Scrolls Online\live\AddOns\`
   - **Linux / Steam Deck (Proton)**: `~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/Documents/Elder Scrolls Online/live/AddOns/`
   - **macOS**: `~/Documents/Elder Scrolls Online/live/AddOns/`

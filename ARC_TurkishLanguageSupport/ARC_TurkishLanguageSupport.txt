@@ -1,0 +1,21 @@
+## Title: |c00D4FFARC_TurkishLanguageSupport|r - Türkçe Dil Desteği
+## Author: @arcsinan
+## Version: 1.0.0
+## AddOnVersion: 10000
+## APIVersion: 101050 101051
+## SavedVariables: ARC_TurkishLanguageSupport_SavedVariables
+## OptionalDependsOn: LibAddonMenu-2.0 LibMediaProvider-1.0
+## Description: Elder Scrolls Online için modern, güncel ve modüler Türkçe dil ve font desteği eklentisi.
+
+; This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
+; The Elder Scrolls® and related logos are registered trademarks or trademarks of ZeniMax Media Inc.
+; in the United States and/or other countries. All rights reserved.
+
+modules/FontManager.lua
+modules/UIStrings.lua
+modules/Skills.lua
+modules/ItemsAndSets.lua
+modules/Quests.lua
+modules/Dialogues.lua
+ARC_TurkishLanguageSupportSettings.lua
+ARC_TurkishLanguageSupport.lua
