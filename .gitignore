@@ -16,3 +16,7 @@ __pycache__/
 dist/
 *.zip
 build_release_zip.sh
+tools/
+*.lang
+*.csv
+*.EsoIdData

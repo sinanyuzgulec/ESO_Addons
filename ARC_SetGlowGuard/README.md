@@ -67,6 +67,12 @@
 
 ---
 
+## 🙏 Acknowledgments
+
+- Special thanks to **Baertram** (ESOUI lead moderator) for code review, event filter recommendations, and best practice guidance.
+
+---
+
 ## 📄 License
 
 Author: **@arcsinan** ([GitHub](https://github.com/sinanyuzgulec))  

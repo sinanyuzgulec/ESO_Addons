@@ -1,13 +1,18 @@
 -- ARC_SetGlowGuard - Set Glow & Equipment Tracker for Elder Scrolls Online
 -- Author: @arcsinan
--- Version: 1.0.0
+-- Version: 1.0.1
 
 ARC_SetGlowGuard = ARC_SetGlowGuard or {}
 local ASGG = ARC_SetGlowGuard
 
 ASGG.name = "ARC_SetGlowGuard"
-ASGG.version = "1.0.0"
+ASGG.version = "1.0.2"
 ASGG.author = "@arcsinan"
+
+-- Cached scene and fragment references
+local invScene
+local charFragm
+local hookedLists = {}
 
 -- Default settings
 ASGG.defaults = {
@@ -89,27 +94,17 @@ function ASGG.UpdateEquippedSets()
     for _, slotId in ipairs(ASGG.EQUIP_SLOTS) do
         local link = GetItemLink(BAG_WORN, slotId)
         if link and link ~= "" then
-            local hasSet, setName, numBonuses, numEquipped, maxEquipped, setId = GetItemLinkSetInfo(link, true)
-            local isMythic = false
-            if GetItemLinkDisplayQuality then
-                isMythic = (GetItemLinkDisplayQuality(link) >= ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE)
-            end
+            local hasSet, setName, _, numEquipped, maxEquipped, setId = GetItemLinkSetInfo(link, true)
+            local isMythic = (GetItemLinkDisplayQuality and GetItemLinkDisplayQuality(link) >= ITEM_DISPLAY_QUALITY_MYTHIC_OVERRIDE) or false
 
-            if hasSet and setName and setName ~= "" then
-                local setKey = (setId and setId > 0) and setId or setName
-
-                if not ASGG.equippedSets[setKey] then
+            if hasSet and setId and setId > 0 then
+                if not ASGG.equippedSets[setId] then
                     ASGG.numEquippedSets = ASGG.numEquippedSets + 1
                     local colorsList = (ASGG.vars and ASGG.vars.colors) or ASGG.defaults.colors
                     local colorIdx = ((ASGG.numEquippedSets - 1) % #colorsList) + 1
-                    local color = colorsList[colorIdx]
+                    local color = isMythic and colorsList.mythic or colorsList[colorIdx]
 
-                    if isMythic then
-                        color = colorsList.mythic
-                    end
-
-                    ASGG.equippedSets[setKey] = {
-                        key = setKey,
+                    ASGG.equippedSets[setId] = {
                         id = setId,
                         name = setName,
                         maxEquipped = maxEquipped or 5,
@@ -118,18 +113,18 @@ function ASGG.UpdateEquippedSets()
                         isMythic = isMythic,
                         slots = { slotId },
                     }
-                    table.insert(setOrder, setKey)
+                    table.insert(setOrder, setId)
                 else
-                    table.insert(ASGG.equippedSets[setKey].slots, slotId)
+                    table.insert(ASGG.equippedSets[setId].slots, slotId)
                 end
-                ASGG.slotSetMap[slotId] = setKey
+                ASGG.slotSetMap[slotId] = setId
             end
         end
     end
 
     -- Flag incomplete sets (e.g. 4/5 or 1/2) so player knows an item is missing
-    for _, setKey in ipairs(setOrder) do
-        local setData = ASGG.equippedSets[setKey]
+    for _, setId in ipairs(setOrder) do
+        local setData = ASGG.equippedSets[setId]
         if setData and not setData.isMythic and setData.numEquipped < setData.maxEquipped then
             setData.isIncomplete = true
         end
@@ -165,9 +160,9 @@ function ASGG.UpdateEquipmentGlows()
                 badge:SetDrawLayer(DL_OVERLAY)
             end
 
-            local setKey = ASGG.slotSetMap[slotId]
-            if vars.enabled and vars.highlightEquipment and setKey and ASGG.equippedSets[setKey] then
-                local setData = ASGG.equippedSets[setKey]
+            local setId = ASGG.slotSetMap[slotId]
+            if vars.enabled and vars.highlightEquipment and setId and ASGG.equippedSets[setId] then
+                local setData = ASGG.equippedSets[setId]
                 local color = setData.color
                 glow:SetTexture(vars.glowTexture)
                 glow:SetColor(color[1], color[2], color[3], vars.glowIntensity)
@@ -193,8 +188,6 @@ end
 -- Inventory List Hooking (Backpack, Bank, Deconstruction, etc.)
 --------------------------------------------------------------------------------
 
-local hookedLists = {}
-
 local function ProcessRowMark(rowControl, slotData)
     if not rowControl or not slotData then return end
 
@@ -209,17 +202,16 @@ local function ProcessRowMark(rowControl, slotData)
         return
     end
 
-    local link = GetItemLink(slotData.bagId, slotData.slotIndex)
+    local link = slotData.itemLink or (slotData.bagId and slotData.slotIndex and GetItemLink(slotData.bagId, slotData.slotIndex))
     if not link or link == "" then
         if iconGlow then iconGlow:SetHidden(true) end
         if rowBar then rowBar:SetHidden(true) end
         return
     end
 
-    local hasSet, setName, numBonuses, numEquipped, maxEquipped, setId = GetItemLinkSetInfo(link, false)
-    local setKey = (setId and setId > 0) and setId or setName
-    if hasSet and setKey and ASGG.equippedSets[setKey] then
-        local setData = ASGG.equippedSets[setKey]
+    local hasSet, _, _, _, _, setId = GetItemLinkSetInfo(link, false)
+    if hasSet and setId and ASGG.equippedSets[setId] then
+        local setData = ASGG.equippedSets[setId]
         local color = setData.color
 
         if button then
@@ -295,17 +287,18 @@ end
 --------------------------------------------------------------------------------
 
 function ASGG.UpdateInventoryAttachment()
-    local invScene = SCENE_MANAGER and SCENE_MANAGER:GetScene("inventory")
-    if not invScene or not CHARACTER_WINDOW_FRAGMENT then return end
+    invScene = invScene or SCENE_MANAGER:GetScene("inventory")
+    charFragm = charFragm or CHARACTER_WINDOW_FRAGMENT
+    if not invScene or not charFragm then return end
 
     local vars = ASGG.vars or ASGG.defaults
     if vars.autoShowCharacterOnInventory then
-        if not invScene:HasFragment(CHARACTER_WINDOW_FRAGMENT) then
-            invScene:AddFragment(CHARACTER_WINDOW_FRAGMENT)
+        if not invScene:HasFragment(charFragm) then
+            invScene:AddFragment(charFragm)
         end
     else
-        if invScene:HasFragment(CHARACTER_WINDOW_FRAGMENT) then
-            invScene:RemoveFragment(CHARACTER_WINDOW_FRAGMENT)
+        if invScene:HasFragment(charFragm) then
+            invScene:RemoveFragment(charFragm)
         end
     end
 end
@@ -319,8 +312,7 @@ function ASGG.Refresh()
     ASGG.UpdateEquipmentGlows()
     ASGG.UpdateInventoryAttachment()
 
-    -- Trigger scroll list update if backpack is open
-    if ZO_PlayerInventoryList and not ZO_PlayerInventoryList:IsHidden() then
+    if not ZO_PlayerInventoryList:IsHidden() then
         ZO_ScrollList_RefreshVisible(ZO_PlayerInventoryList)
     end
 end
@@ -330,9 +322,9 @@ end
 --------------------------------------------------------------------------------
 
 function ASGG.DonateGold(amount)
-    local world = (GetWorldName and GetWorldName()) or ""
+    local world = GetWorldName()
     if world ~= "" and not string.find(string.lower(world), "eu") then
-        local warnFmt = ASGG.GetString("CHAT_SERVER_WARNING")
+        local warnFmt = GetString(SI_ARC_SGG_CHAT_SERVER_WARN)
         d(string.format(warnFmt, tostring(world)))
     end
 
@@ -347,7 +339,7 @@ function ASGG.DonateGold(amount)
             ZO_MailSendSubjectField:SetText("ARC_SetGlowGuard Donation")
         end
         if ZO_MailSendBodyField then
-            local mailBody = ASGG.GetString("MAIL_BODY_DEFAULT")
+            local mailBody = GetString(SI_ARC_SGG_MAIL_BODY)
             ZO_MailSendBodyField:SetText(mailBody)
             ZO_MailSendBodyField:TakeFocus()
         end
@@ -361,41 +353,11 @@ function ASGG.DonateGold(amount)
 end
 
 --------------------------------------------------------------------------------
--- Slash Commands (/sgg or /setglow)
---------------------------------------------------------------------------------
-
-SLASH_COMMANDS["/sgg"] = function(args)
-    if args == "settings" or args == "menu" then
-        if LibAddonMenu2 and LibAddonMenu2.OpenToPanel and ASGG.settingsPanel then
-            LibAddonMenu2:OpenToPanel(ASGG.settingsPanel)
-        end
-    else
-        ASGG.Refresh()
-        local refreshFmt = ASGG.GetString("CHAT_REFRESHED")
-        d(string.format(refreshFmt, tonumber(ASGG.numEquippedSets) or 0))
-        for setKey, setData in pairs(ASGG.equippedSets) do
-            local statusStr
-            if setData.isIncomplete then
-                local incFmt = ASGG.GetString("CHAT_SET_INCOMPLETE")
-                statusStr = string.format(incFmt, setData.numEquipped, setData.maxEquipped)
-            else
-                local compFmt = ASGG.GetString("CHAT_SET_COMPLETE")
-                statusStr = string.format(compFmt, setData.numEquipped, setData.maxEquipped)
-            end
-            d(string.format("  - %s %s", setData.name, statusStr))
-        end
-    end
-end
-SLASH_COMMANDS["/setglow"] = SLASH_COMMANDS["/sgg"]
-
---------------------------------------------------------------------------------
 -- Initialization & Event Handling
 --------------------------------------------------------------------------------
 
 local function OnInventorySlotUpdate(eventCode, bagId, slotId, isNewItem, itemSoundCategory, updateReason)
-    if bagId == BAG_WORN or bagId == BAG_BACKPACK then
-        ASGG.Refresh()
-    end
+    ASGG.Refresh()
 end
 
 local function OnActiveWeaponPairChanged(eventCode, activeWeaponPair)
@@ -408,16 +370,13 @@ local function OnPlayerActivated(eventCode)
     ASGG.HookAllItemLists()
     ASGG.Refresh()
 
-    -- Hook scene state changes to ensure fresh glows on open
-    if INVENTORY_FRAGMENT then
-        INVENTORY_FRAGMENT:RegisterCallback("StateChange", function(oldState, newState)
-            if newState == SCENE_FRAGMENT_SHOWING or newState == SCENE_FRAGMENT_SHOWN then
-                ASGG.Refresh()
-            end
-        end)
-    end
+    INVENTORY_FRAGMENT:RegisterCallback("StateChange", function(oldState, newState)
+        if newState == SCENE_FRAGMENT_SHOWING or newState == SCENE_FRAGMENT_SHOWN then
+            ASGG.Refresh()
+        end
+    end)
 
-    local statsScene = SCENE_MANAGER and SCENE_MANAGER:GetScene("stats")
+    local statsScene = SCENE_MANAGER:GetScene("stats")
     if statsScene then
         statsScene:RegisterCallback("StateChange", function(oldState, newState)
             if newState == SCENE_SHOWING or newState == SCENE_SHOWN then
@@ -432,20 +391,55 @@ local function OnAddOnLoaded(eventCode, addOnName)
 
     EVENT_MANAGER:UnregisterForEvent(ASGG.name, EVENT_ADD_ON_LOADED)
 
-    ASGG.vars = ZO_SavedVars:NewAccountWide("ARC_SetGlowGuard_SavedVariables", 1, nil, ASGG.defaults)
+    local worldName = GetWorldName()
+    ASGG.vars = ZO_SavedVars:NewAccountWide("ARC_SetGlowGuard_SavedVariables", 1, worldName, ASGG.defaults, nil, nil)
 
-    -- Register settings menu
+    if ASGG.vars.language == "tr" and ASGG.ApplyTurkishStrings then
+        ASGG.ApplyTurkishStrings()
+    end
+
     if ASGG.InitSettings then
         ASGG.InitSettings()
     end
 
-    -- Event registrations
-    EVENT_MANAGER:RegisterForEvent(ASGG.name .. "_SlotUpdate", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, OnInventorySlotUpdate)
+    -- Register Slash Commands inside OnAddOnLoaded to ensure SavedVars are ready
+    SLASH_COMMANDS["/sgg"] = function(args)
+        if args == "settings" or args == "menu" then
+            if LibAddonMenu2 and LibAddonMenu2.OpenToPanel and ASGG.settingsPanel then
+                LibAddonMenu2:OpenToPanel(ASGG.settingsPanel)
+            end
+        else
+            ASGG.Refresh()
+            local refreshFmt = GetString(SI_ARC_SGG_CHAT_REFRESHED)
+            d(string.format(refreshFmt, tonumber(ASGG.numEquippedSets) or 0))
+            for setId, setData in pairs(ASGG.equippedSets) do
+                local statusStr
+                if setData.isIncomplete then
+                    local incFmt = GetString(SI_ARC_SGG_CHAT_INCOMPLETE)
+                    statusStr = string.format(incFmt, setData.numEquipped, setData.maxEquipped)
+                else
+                    local compFmt = GetString(SI_ARC_SGG_CHAT_COMPLETE)
+                    statusStr = string.format(compFmt, setData.numEquipped, setData.maxEquipped)
+                end
+                d(string.format("  - %s %s", setData.name, statusStr))
+            end
+        end
+    end
+    SLASH_COMMANDS["/setglow"] = SLASH_COMMANDS["/sgg"]
+
+    -- Engine-level event filters to prevent unnecessary calls on durability/charge changes
+    EVENT_MANAGER:RegisterForEvent(ASGG.name .. "_SlotWorn", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, OnInventorySlotUpdate)
+    EVENT_MANAGER:AddFilterForEvent(ASGG.name .. "_SlotWorn", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, REGISTER_FILTER_BAG_ID, BAG_WORN)
+    EVENT_MANAGER:AddFilterForEvent(ASGG.name .. "_SlotWorn", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, REGISTER_FILTER_INVENTORY_UPDATE_REASON, INVENTORY_UPDATE_REASON_DEFAULT)
+
+    EVENT_MANAGER:RegisterForEvent(ASGG.name .. "_SlotBag", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, OnInventorySlotUpdate)
+    EVENT_MANAGER:AddFilterForEvent(ASGG.name .. "_SlotBag", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, REGISTER_FILTER_BAG_ID, BAG_BACKPACK)
+    EVENT_MANAGER:AddFilterForEvent(ASGG.name .. "_SlotBag", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, REGISTER_FILTER_INVENTORY_UPDATE_REASON, INVENTORY_UPDATE_REASON_DEFAULT)
+
     EVENT_MANAGER:RegisterForEvent(ASGG.name .. "_FullUpdate", EVENT_INVENTORY_FULL_UPDATE, function() ASGG.Refresh() end)
     EVENT_MANAGER:RegisterForEvent(ASGG.name .. "_WeaponSwap", EVENT_ACTIVE_WEAPON_PAIR_CHANGED, OnActiveWeaponPairChanged)
     EVENT_MANAGER:RegisterForEvent(ASGG.name .. "_Activated", EVENT_PLAYER_ACTIVATED, OnPlayerActivated)
 
-    -- If player is already activated (e.g. after /reloadui), initialize immediately
     if IsPlayerActivated and IsPlayerActivated() then
         zo_callLater(function()
             ASGG.HookAllItemLists()
@@ -454,5 +448,4 @@ local function OnAddOnLoaded(eventCode, addOnName)
     end
 end
 
--- Crucial: EVENT_ADD_ON_LOADED (with double underscore)
 EVENT_MANAGER:RegisterForEvent(ASGG.name, EVENT_ADD_ON_LOADED, OnAddOnLoaded)

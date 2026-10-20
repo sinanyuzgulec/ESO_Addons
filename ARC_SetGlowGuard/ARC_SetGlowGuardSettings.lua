@@ -1,4 +1,4 @@
--- ARC_SetGlowGuardSettings.lua - LibAddonMenu-2.0 Settings Panel with Multi-Language Support
+-- ARC_SetGlowGuardSettings.lua - LibAddonMenu-2.0 Settings Panel
 -- Author: @arcsinan
 
 ARC_SetGlowGuard = ARC_SetGlowGuard or {}
@@ -6,14 +6,13 @@ local ASGG = ARC_SetGlowGuard
 
 function ASGG.InitSettings()
     local LAM = LibAddonMenu2
-    if not LAM then return end
 
     local panelData = {
         type = "panel",
         name = "ARC_SetGlowGuard",
         displayName = "|c00D4FFARC_SetGlowGuard|r - Set Glow & Equipment Tracker",
         author = "|c00E676@arcsinan|r",
-        version = ASGG.version or "1.0.0",
+        version = ASGG.version or "1.0.2",
         donation = function() ASGG.DonateGold(5000) end,
         registerForRefresh = true,
         registerForDefaults = true,
@@ -25,17 +24,20 @@ function ASGG.InitSettings()
         ------------------------------------------------------------------------
         {
             type = "header",
-            name = function() return ASGG.GetString("HDR_GENERAL") end,
+            name = function() return GetString(SI_ARC_SGG_HDR_GENERAL) end,
         },
         {
             type = "dropdown",
-            name = function() return ASGG.GetString("OPT_LANGUAGE") end,
-            tooltip = function() return ASGG.GetString("OPT_LANGUAGE_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_LANGUAGE) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_LANGUAGE_TT) end,
             choices = { "English", "Türkçe" },
             choicesValues = { "en", "tr" },
             getFunc = function() return (ASGG.vars and ASGG.vars.language) or "en" end,
             setFunc = function(value)
                 ASGG.vars.language = value
+                if value == "tr" and ASGG.ApplyTurkishStrings then
+                    ASGG.ApplyTurkishStrings()
+                end
                 if LAM.util and LAM.util.RequestRefreshIfNeeded then
                     LAM.util.RequestRefreshIfNeeded(ASGG.settingsPanel)
                 end
@@ -45,8 +47,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = function() return ASGG.GetString("OPT_ENABLE") end,
-            tooltip = function() return ASGG.GetString("OPT_ENABLE_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_ENABLE) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_ENABLE_TT) end,
             getFunc = function() return ASGG.vars.enabled end,
             setFunc = function(value)
                 ASGG.vars.enabled = value
@@ -57,8 +59,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = function() return ASGG.GetString("OPT_AUTO_CHAR") end,
-            tooltip = function() return ASGG.GetString("OPT_AUTO_CHAR_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_AUTO_CHAR) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_AUTO_CHAR_TT) end,
             getFunc = function() return ASGG.vars.autoShowCharacterOnInventory end,
             setFunc = function(value)
                 ASGG.vars.autoShowCharacterOnInventory = value
@@ -69,8 +71,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = function() return ASGG.GetString("OPT_HIGHLIGHT_EQUIP") end,
-            tooltip = function() return ASGG.GetString("OPT_HIGHLIGHT_EQUIP_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_HIGHLIGHT_EQUIP) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_HIGHLIGHT_EQUIP_TT) end,
             getFunc = function() return ASGG.vars.highlightEquipment end,
             setFunc = function(value)
                 ASGG.vars.highlightEquipment = value
@@ -81,8 +83,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = function() return ASGG.GetString("OPT_HIGHLIGHT_BAG") end,
-            tooltip = function() return ASGG.GetString("OPT_HIGHLIGHT_BAG_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_HIGHLIGHT_BAG) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_HIGHLIGHT_BAG_TT) end,
             getFunc = function() return ASGG.vars.highlightBackpack end,
             setFunc = function(value)
                 ASGG.vars.highlightBackpack = value
@@ -93,8 +95,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = function() return ASGG.GetString("OPT_ROW_BAR") end,
-            tooltip = function() return ASGG.GetString("OPT_ROW_BAR_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_ROW_BAR) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_ROW_BAR_TT) end,
             getFunc = function() return ASGG.vars.showRowBar end,
             setFunc = function(value)
                 ASGG.vars.showRowBar = value
@@ -105,8 +107,8 @@ function ASGG.InitSettings()
         },
         {
             type = "checkbox",
-            name = function() return ASGG.GetString("OPT_INCOMPLETE_ALERT") end,
-            tooltip = function() return ASGG.GetString("OPT_INCOMPLETE_ALERT_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_INCOMPLETE) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_INCOMPLETE_TT) end,
             getFunc = function() return ASGG.vars.showIncompleteWarning end,
             setFunc = function(value)
                 ASGG.vars.showIncompleteWarning = value
@@ -117,8 +119,8 @@ function ASGG.InitSettings()
         },
         {
             type = "slider",
-            name = function() return ASGG.GetString("OPT_GLOW_INTENSITY") end,
-            tooltip = function() return ASGG.GetString("OPT_GLOW_INTENSITY_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_GLOW_INTENSITY) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_GLOW_INTENSITY_TT) end,
             min = 0.2,
             max = 1.0,
             step = 0.05,
@@ -133,8 +135,8 @@ function ASGG.InitSettings()
         },
         {
             type = "dropdown",
-            name = function() return ASGG.GetString("OPT_GLOW_STYLE") end,
-            tooltip = function() return ASGG.GetString("OPT_GLOW_STYLE_TT") end,
+            name = function() return GetString(SI_ARC_SGG_OPT_GLOW_STYLE) end,
+            tooltip = function() return GetString(SI_ARC_SGG_OPT_GLOW_STYLE_TT) end,
             choices = { "Action Bar Glow", "Magical Soft Highlight", "Item Pulse" },
             choicesValues = {
                 "EsoUI/Art/ActionBar/actionBar_mouseOver.dds",
@@ -155,17 +157,17 @@ function ASGG.InitSettings()
         ------------------------------------------------------------------------
         {
             type = "header",
-            name = function() return ASGG.GetString("HDR_CUSTOM_COLORS") end,
+            name = function() return GetString(SI_ARC_SGG_HDR_COLORS) end,
         },
         {
             type = "description",
-            text = function() return ASGG.GetString("DESC_CUSTOM_COLORS") end,
+            text = function() return GetString(SI_ARC_SGG_DESC_COLORS) end,
             width = "full",
         },
         {
             type = "colorpicker",
-            name = function() return ASGG.GetString("COLOR_SET_1") end,
-            tooltip = function() return ASGG.GetString("COLOR_SET_1") end,
+            name = function() return GetString(SI_ARC_SGG_COLOR_SET_1) end,
+            tooltip = function() return GetString(SI_ARC_SGG_COLOR_SET_1) end,
             getFunc = function()
                 local c = ASGG.vars.colors[1]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -179,8 +181,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = function() return ASGG.GetString("COLOR_SET_2") end,
-            tooltip = function() return ASGG.GetString("COLOR_SET_2") end,
+            name = function() return GetString(SI_ARC_SGG_COLOR_SET_2) end,
+            tooltip = function() return GetString(SI_ARC_SGG_COLOR_SET_2) end,
             getFunc = function()
                 local c = ASGG.vars.colors[2]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -194,8 +196,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = function() return ASGG.GetString("COLOR_SET_3") end,
-            tooltip = function() return ASGG.GetString("COLOR_SET_3") end,
+            name = function() return GetString(SI_ARC_SGG_COLOR_SET_3) end,
+            tooltip = function() return GetString(SI_ARC_SGG_COLOR_SET_3) end,
             getFunc = function()
                 local c = ASGG.vars.colors[3]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -209,8 +211,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = function() return ASGG.GetString("COLOR_SET_4") end,
-            tooltip = function() return ASGG.GetString("COLOR_SET_4") end,
+            name = function() return GetString(SI_ARC_SGG_COLOR_SET_4) end,
+            tooltip = function() return GetString(SI_ARC_SGG_COLOR_SET_4) end,
             getFunc = function()
                 local c = ASGG.vars.colors[4]
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -224,8 +226,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = function() return ASGG.GetString("COLOR_MYTHIC") end,
-            tooltip = function() return ASGG.GetString("COLOR_MYTHIC") end,
+            name = function() return GetString(SI_ARC_SGG_COLOR_MYTHIC) end,
+            tooltip = function() return GetString(SI_ARC_SGG_COLOR_MYTHIC) end,
             getFunc = function()
                 local c = ASGG.vars.colors.mythic
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -239,8 +241,8 @@ function ASGG.InitSettings()
         },
         {
             type = "colorpicker",
-            name = function() return ASGG.GetString("COLOR_WARNING") end,
-            tooltip = function() return ASGG.GetString("COLOR_WARNING") end,
+            name = function() return GetString(SI_ARC_SGG_COLOR_WARNING) end,
+            tooltip = function() return GetString(SI_ARC_SGG_COLOR_WARNING) end,
             getFunc = function()
                 local c = ASGG.vars.colors.warning
                 return c[1], c[2], c[3], c[4] or 1.0
@@ -254,8 +256,8 @@ function ASGG.InitSettings()
         },
         {
             type = "button",
-            name = function() return ASGG.GetString("BTN_RESET_COLORS") end,
-            tooltip = function() return ASGG.GetString("BTN_RESET_COLORS_TT") end,
+            name = function() return GetString(SI_ARC_SGG_BTN_RESET_COLORS) end,
+            tooltip = function() return GetString(SI_ARC_SGG_BTN_RESET_COLORS_TT) end,
             func = function()
                 ASGG.vars.colors = ZO_DeepTableCopy(ASGG.defaults.colors)
                 ASGG.Refresh()
@@ -268,38 +270,38 @@ function ASGG.InitSettings()
         ------------------------------------------------------------------------
         {
             type = "header",
-            name = function() return ASGG.GetString("HDR_DONATE") end,
+            name = function() return GetString(SI_ARC_SGG_HDR_DONATE) end,
         },
         {
             type = "description",
-            text = function() return ASGG.GetString("DESC_DONATE") end,
+            text = function() return GetString(SI_ARC_SGG_DESC_DONATE) end,
             width = "full",
         },
         {
             type = "button",
-            name = function() return ASGG.GetString("BTN_DONATE_5K") end,
-            tooltip = function() return ASGG.GetString("BTN_DONATE_5K_TT") end,
+            name = function() return GetString(SI_ARC_SGG_BTN_DONATE_5K) end,
+            tooltip = function() return GetString(SI_ARC_SGG_BTN_DONATE_5K_TT) end,
             func = function() ASGG.DonateGold(5000) end,
             width = "half",
         },
         {
             type = "button",
-            name = function() return ASGG.GetString("BTN_DONATE_25K") end,
-            tooltip = function() return ASGG.GetString("BTN_DONATE_25K_TT") end,
+            name = function() return GetString(SI_ARC_SGG_BTN_DONATE_25K) end,
+            tooltip = function() return GetString(SI_ARC_SGG_BTN_DONATE_25K_TT) end,
             func = function() ASGG.DonateGold(25000) end,
             width = "half",
         },
         {
             type = "button",
-            name = function() return ASGG.GetString("BTN_DONATE_100K") end,
-            tooltip = function() return ASGG.GetString("BTN_DONATE_100K_TT") end,
+            name = function() return GetString(SI_ARC_SGG_BTN_DONATE_100K) end,
+            tooltip = function() return GetString(SI_ARC_SGG_BTN_DONATE_100K_TT) end,
             func = function() ASGG.DonateGold(100000) end,
             width = "half",
         },
         {
             type = "button",
-            name = function() return ASGG.GetString("BTN_DONATE_CUSTOM") end,
-            tooltip = function() return ASGG.GetString("BTN_DONATE_CUSTOM_TT") end,
+            name = function() return GetString(SI_ARC_SGG_BTN_DONATE_CUSTOM) end,
+            tooltip = function() return GetString(SI_ARC_SGG_BTN_DONATE_CUSTOM_TT) end,
             func = function() ASGG.DonateGold(0) end,
             width = "half",
         },
