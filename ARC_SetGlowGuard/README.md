@@ -1,5 +1,9 @@
 # ARC_SetGlowGuard (ESO Addon)
 
+<p align="center">
+  <img src="./screenshots/equipped_preview.png" alt="ARC_SetGlowGuard In-Game Preview" width="280" />
+</p>
+
 **ARC_SetGlowGuard**, *The Elder Scrolls Online* (ESO) oyuncularının set parçalarını yanlışlıkla çıkarmasını, çantasında kaybetmesini veya eksik setle gezmesini engellemek için geliştirilmiş hafif ve güçlü bir UI eklentisidir.
 
 ---

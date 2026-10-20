@@ -11,6 +11,10 @@ Geliştirici: **@arcsinan** ([GitHub](https://github.com/sinanyuzgulec))
 ### 1. [ARC_SetGlowGuard](./ARC_SetGlowGuard)
 * **Kategori**: Oyun İçi Arayüz (AddOn)
 * **Açıklama**: Giyili zırh, takı ve silah setlerini algılayarak aynı sete ait parçaları ortak canlı renklerle (Glow) parlatır. Yanlışlıkla set parçası çıkarılmasını, çantada kaybolmasını veya eksik parçayla gezilmesini önler.
+* **Görsel Önizleme**:
+  <p align="center">
+    <img src="./ARC_SetGlowGuard/screenshots/equipped_preview.png" alt="ARC_SetGlowGuard In-Game Equipment Preview" width="240" />
+  </p>
 * **Önemli Özellikler**:
   - Giyili set parçalarını otomatik gruplandırıp renklendirme (Cyan, Amber, Mor, Zümrüt Yeşili vb.).
   - `I` tuşuna basıldığında Envanter ile Karakter Ekipman panelini (`ZO_Character`) yan yana açma.
